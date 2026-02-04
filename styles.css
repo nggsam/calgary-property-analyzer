@@ -4136,3 +4136,82 @@ body.light-theme .neighborhood-label {
         /* Prevents iOS zoom */
     }
 }
+
+/* ===================================
+   Compact Page Styles (Map-Only Mode)
+   =================================== */
+.hero-compact {
+    padding: 80px 0 40px;
+}
+
+.hero-compact .hero-title {
+    font-size: 2.5rem;
+}
+
+.hero-compact .hero-subtitle {
+    max-width: 500px;
+}
+
+.map-section-full {
+    padding-top: 0;
+    padding-bottom: 60px;
+}
+
+.map-section-full .map-container-wrapper {
+    min-height: 500px;
+}
+
+.map-section-full #calgaryMapContainer {
+    min-height: 500px;
+}
+
+.map-cta {
+    text-align: center;
+    margin-top: 32px;
+}
+
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+}
+
+.footer-simple {
+    padding: 30px 0;
+    text-align: center;
+    color: var(--gray-500);
+    font-size: 0.875rem;
+}
+
+.footer-simple .container {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .hero-compact .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .map-section-full #calgaryMapContainer {
+        min-height: 350px;
+    }
+
+    .cta-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
