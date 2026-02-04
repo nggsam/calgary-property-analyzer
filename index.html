@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calgary Property Analyzer | Investment Calculator for Calgary Real Estate</title>
+    <meta name="description"
+        content="Analyze Calgary investment properties with accurate local data. Calculate cap rate, cash-on-cash return, IRR, and more with Calgary-specific defaults.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="32" height="32" rx="8" fill="url(#logo-gradient)" />
+                            <path d="M8 20L16 10L24 20H8Z" fill="white" fill-opacity="0.9" />
+                            <rect x="14" y="18" width="4" height="6" fill="white" fill-opacity="0.7" />
+                            <defs>
+                                <linearGradient id="logo-gradient" x1="0" y1="0" x2="32" y2="32"
+                                    gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#6366F1" />
+                                    <stop offset="1" stop-color="#8B5CF6" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span class="logo-text">Calgary<span class="logo-highlight">Analyzer</span></span>
+                </div>
+                <nav class="nav">
+                    <a href="#calculator" class="nav-link active">Calculator</a>
+                    <a href="#scenarios" class="nav-link">Scenarios</a>
+                    <a href="#brrrr" class="nav-link">BRRRR</a>
+                    <a href="#portfolio" class="nav-link">Portfolio</a>
+                    <a href="#amortization-schedule" class="nav-link">Amortization</a>
+                    <a href="#tax" class="nav-link">Tax</a>
+                    <a href="#neighborhoods" class="nav-link">Neighborhoods</a>
+                </nav>
+                <div class="header-actions">
+                    <button id="themeToggle" class="theme-toggle" title="Toggle theme">
+                        <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="5" />
+                            <line x1="12" y1="1" x2="12" y2="3" />
+                            <line x1="12" y1="21" x2="12" y2="23" />
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                            <line x1="1" y1="12" x2="3" y2="12" />
+                            <line x1="21" y1="12" x2="23" y2="12" />
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </svg>
+                        <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    Live Calgary Market Data
+                </div>
+                <h1 class="hero-title">Analyze Calgary Investment Properties<br><span class="gradient-text">With
+                        Confidence</span></h1>
+                <p class="hero-subtitle">Built specifically for Calgary's unique market. Pre-populated with accurate
+                    local costs, neighborhood data, and real-time market insights.</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-value">200+</span>
+                        <span class="stat-label">Neighborhoods</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <span class="stat-value">6%</span>
+                        <span class="stat-label">Current Vacancy</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat">
+                        <span class="stat-value">$1,522</span>
+                        <span class="stat-label">Avg 1BR Rent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-gradient"></div>
+    </section>
+
+    <!-- Interactive Neighborhood Map -->
+    <section class="map-section">
+        <div class="container">
+            <div class="map-section-header">
+                <h2>Explore Calgary Neighborhoods</h2>
+                <p>Hover over any neighborhood to see real-time investment data. Click to analyze with those values
+                    pre-filled.</p>
+            </div>
+
+            <div class="map-container-wrapper">
+                <!-- Map Container (populated by JavaScript) -->
+                <div id="calgaryMapContainer"></div>
+
+                <!-- Legend and Top Picks -->
+                <div class="map-legend">
+                    <h3>Investment Score</h3>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #10b981;"></div>
+                        <span class="legend-label">Excellent</span>
+                        <span class="legend-range">80+</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #22c55e;"></div>
+                        <span class="legend-label">Good</span>
+                        <span class="legend-range">75-79</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #84cc16;"></div>
+                        <span class="legend-label">Above Average</span>
+                        <span class="legend-range">70-74</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #eab308;"></div>
+                        <span class="legend-label">Average</span>
+                        <span class="legend-range">65-69</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: #f97316;"></div>
+                        <span class="legend-label">Below Average</span>
+                        <span class="legend-range">60-64</span>
+                    </div>
+
+                    <!-- Top Neighborhoods -->
+                    <div class="top-neighborhoods" id="topNeighborhoods">
+                        <h4>🏆 Top Investment Picks</h4>
+                        <!-- Populated by JavaScript -->
+                    </div>
+
+                    <!-- Data Info -->
+                    <div class="map-data-info">
+                        <span id="mapLastUpdated">Data updated: Today</span>
+                        <button class="map-refresh-btn" onclick="CalgaryMap.fetchFreshData()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M23 4v6h-6M1 20v-6h6" />
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                            </svg>
+                            Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Hint -->
+            <div class="scroll-hint">
+                <span>
+                    Scroll down to analyze properties
+                    <span class="arrow">↓</span>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Calculator Section -->
+    <section id="calculator" class="calculator-section">
+        <div class="container">
+            <div class="calculator-grid">
+                <!-- Left Panel - Inputs -->
+                <div class="input-panel">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Property Details</h2>
+                        <p class="panel-subtitle">Enter property information to analyze</p>
+                    </div>
+
+                    <!-- Property Type Selection -->
+                    <div class="property-type-selector">
+                        <button class="property-type-btn active" data-type="house">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9,22 9,12 15,12 15,22" />
+                            </svg>
+                            <span>House</span>
+                        </button>
+                        <button class="property-type-btn" data-type="condo">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="4" y="2" width="16" height="20" rx="2" />
+                                <path
+                                    d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01" />
+                            </svg>
+                            <span>Condo</span>
+                        </button>
+                        <button class="property-type-btn" data-type="townhouse">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 21h18M4 21V10l4-4 4 4v11M12 21V10l4-4 4 4v11" />
+                                <path d="M8 13h.01M8 17h.01M16 13h.01M16 17h.01" />
+                            </svg>
+                            <span>Townhouse</span>
+                        </button>
+                    </div>
+
+                    <!-- Input Groups -->
+                    <div class="input-groups">
+                        <!-- Purchase Details -->
+                        <div class="input-group">
+                            <div class="input-group-header">
+                                <h3 class="input-group-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M12 6v6l4 2" />
+                                    </svg>
+                                    Purchase Details
+                                </h3>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="purchasePrice">Purchase Price</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="purchasePrice" value="350,000" class="currency-input">
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <label for="downPayment">Down Payment</label>
+                                    <div class="input-wrapper percentage">
+                                        <input type="number" id="downPayment" value="20" min="5" max="100">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                    <span class="input-hint" id="downPaymentAmount">$70,000</span>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="interestRate">Interest Rate</label>
+                                    <div class="input-wrapper percentage">
+                                        <input type="number" id="interestRate" value="5.5" step="0.1" min="0" max="15">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <label for="amortization">Amortization</label>
+                                    <div class="input-wrapper">
+                                        <select id="amortization">
+                                            <option value="25" selected>25 years</option>
+                                            <option value="30">30 years</option>
+                                            <option value="20">20 years</option>
+                                            <option value="15">15 years</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="input-row single">
+                                <div class="input-field">
+                                    <label for="closingCosts">Closing Costs</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="closingCosts" value="5,000" class="currency-input">
+                                    </div>
+                                    <span class="input-hint">Typically 1-2% of purchase price</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Rental Income -->
+                        <div class="input-group">
+                            <div class="input-group-header">
+                                <h3 class="input-group-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" />
+                                        <line x1="1" y1="10" x2="23" y2="10" />
+                                    </svg>
+                                    Rental Income
+                                </h3>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="monthlyRent">Monthly Rent</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="monthlyRent" value="2,500" class="currency-input">
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <label for="vacancyRate">Vacancy Rate</label>
+                                    <div class="input-wrapper percentage">
+                                        <input type="number" id="vacancyRate" value="6" step="1" min="0" max="20">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                    <span class="input-hint calgary-default">Calgary current: ~6%</span>
+                                </div>
+                            </div>
+                            <div class="input-row single">
+                                <div class="input-field">
+                                    <label for="neighborhood">Neighborhood</label>
+                                    <div class="input-wrapper">
+                                        <select id="neighborhood">
+                                            <option value="">Select neighborhood...</option>
+                                            <optgroup label="Downtown & Central">
+                                                <option value="downtown-core">Downtown Core ($1,997/mo avg)</option>
+                                                <option value="east-village">East Village ($2,079/mo avg)</option>
+                                                <option value="beltline">Beltline ($1,849/mo avg)</option>
+                                                <option value="mission">Mission ($1,760/mo avg)</option>
+                                                <option value="cliff-bungalow">Cliff Bungalow ($2,020/mo avg)</option>
+                                            </optgroup>
+                                            <optgroup label="Inner City">
+                                                <option value="bridgeland">Bridgeland/Riverside ($1,955/mo avg)</option>
+                                                <option value="kensington">Kensington ($1,800/mo avg)</option>
+                                                <option value="hillhurst">Hillhurst ($1,750/mo avg)</option>
+                                                <option value="sunnyside">Sunnyside ($1,780/mo avg)</option>
+                                                <option value="inglewood">Inglewood ($1,720/mo avg)</option>
+                                            </optgroup>
+                                            <optgroup label="Southwest">
+                                                <option value="altadore">Altadore ($1,862/mo avg)</option>
+                                                <option value="marda-loop">Marda Loop ($1,820/mo avg)</option>
+                                                <option value="mount-royal">Mount Royal ($1,645/mo avg)</option>
+                                                <option value="killarney">Killarney ($1,680/mo avg)</option>
+                                            </optgroup>
+                                            <optgroup label="Northwest">
+                                                <option value="sage-hill">Sage Hill ($1,980/mo avg)</option>
+                                                <option value="nolan-hill">Nolan Hill ($1,449/mo avg)</option>
+                                                <option value="university-heights">University Heights ($1,720/mo avg)
+                                                </option>
+                                            </optgroup>
+                                            <optgroup label="Northeast">
+                                                <option value="skyview-ranch">Skyview Ranch ($1,692/mo avg)</option>
+                                                <option value="tuxedo-park">Tuxedo Park ($1,504/mo avg)</option>
+                                                <option value="renfrew">Renfrew ($1,620/mo avg)</option>
+                                            </optgroup>
+                                            <optgroup label="Southeast">
+                                                <option value="mckenzie-towne">McKenzie Towne ($1,750/mo avg)</option>
+                                                <option value="auburn-bay">Auburn Bay ($1,720/mo avg)</option>
+                                                <option value="new-brighton">New Brighton ($1,680/mo avg)</option>
+                                            </optgroup>
+                                            <optgroup label="Most Affordable">
+                                                <option value="applewood-park">Applewood Park ($1,430/mo avg)</option>
+                                                <option value="bankview">Bankview ($1,434/mo avg)</option>
+                                                <option value="kingsland">Kingsland ($1,472/mo avg)</option>
+                                                <option value="carrington">Carrington ($1,494/mo avg)</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calgary Operating Costs -->
+                        <div class="input-group calgary-costs">
+                            <div class="input-group-header">
+                                <h3 class="input-group-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                                        <path d="M2 17l10 5 10-5" />
+                                        <path d="M2 12l10 5 10-5" />
+                                    </svg>
+                                    Calgary Operating Costs
+                                </h3>
+                                <span class="calgary-badge">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                        <polyline points="22 4 12 14.01 9 11.01" />
+                                    </svg>
+                                    Auto-populated
+                                </span>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="propertyTax">Property Tax (Annual)</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="propertyTax" value="2,781" class="currency-input">
+                                    </div>
+                                    <span class="input-hint calgary-default">Rate: 0.618% (2025)</span>
+                                </div>
+                                <div class="input-field">
+                                    <label for="insurance">Insurance (Annual)</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="insurance" value="1,800" class="currency-input">
+                                    </div>
+                                    <span class="input-hint calgary-default">Landlord policy</span>
+                                </div>
+                            </div>
+                            <div class="input-row" id="condoFeeRow" style="display: none;">
+                                <div class="input-field full-width">
+                                    <label for="condoFees">Condo Fees (Monthly)</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="condoFees" value="375" class="currency-input">
+                                    </div>
+                                    <span class="input-hint calgary-default">Avg: $0.50/sqft in Calgary</span>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="maintenance">Maintenance</label>
+                                    <div class="input-wrapper percentage">
+                                        <input type="number" id="maintenance" value="8" step="1" min="0" max="20">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                    <span class="input-hint">of gross rent</span>
+                                </div>
+                                <div class="input-field">
+                                    <label for="propertyManagement">Property Management</label>
+                                    <div class="input-wrapper percentage">
+                                        <input type="number" id="propertyManagement" value="8" step="1" min="0"
+                                            max="15">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                    <span class="input-hint">Typical: 6-10%</span>
+                                </div>
+                            </div>
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label for="utilitiesIncluded">Utilities Included?</label>
+                                    <div class="toggle-wrapper">
+                                        <label class="toggle">
+                                            <input type="checkbox" id="utilitiesIncluded">
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                        <span class="toggle-label">Tenant pays</span>
+                                    </div>
+                                </div>
+                                <div class="input-field" id="utilitiesCostField" style="display: none;">
+                                    <label for="utilitiesCost">Utilities (Monthly)</label>
+                                    <div class="input-wrapper currency">
+                                        <span class="input-prefix">$</span>
+                                        <input type="text" id="utilitiesCost" value="350" class="currency-input">
+                                    </div>
+                                    <span class="input-hint calgary-default">Gas + Electric + Water</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons">
+                        <button id="analyzeBtn" class="analyze-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                            Analyze Property
+                        </button>
+                        <div class="secondary-buttons">
+                            <button id="exportBtn" class="secondary-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="7 10 12 15 17 10" />
+                                    <line x1="12" y1="15" x2="12" y2="3" />
+                                </svg>
+                                Export PDF
+                            </button>
+                            <button id="printBtn" class="secondary-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="6 9 6 2 18 2 18 9" />
+                                    <path
+                                        d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                    <rect x="6" y="14" width="12" height="8" />
+                                </svg>
+                                Print
+                            </button>
+                            <button id="shareBtn" class="secondary-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="18" cy="5" r="3" />
+                                    <circle cx="6" cy="12" r="3" />
+                                    <circle cx="18" cy="19" r="3" />
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                                </svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel - Results -->
+                <div class="results-panel">
+                    <!-- Deal Score -->
+                    <div class="deal-score-card">
+                        <div class="deal-score-header">
+                            <h3>Deal Score</h3>
+                            <div class="deal-score-tooltip">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                                </svg>
+                                <span class="tooltip-text">Weighted score based on cash flow, cap rate, and market
+                                    conditions</span>
+                            </div>
+                        </div>
+                        <div class="deal-score-display">
+                            <div class="score-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="score-ring-bg" cx="50" cy="50" r="45" />
+                                    <circle class="score-ring-progress" cx="50" cy="50" r="45" id="scoreRing" />
+                                </svg>
+                                <div class="score-value">
+                                    <span id="dealScore">72</span>
+                                    <span class="score-max">/100</span>
+                                </div>
+                            </div>
+                            <div class="score-label" id="scoreLabel">Good Deal</div>
+                        </div>
+                        <div class="score-breakdown">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Cash Flow</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" id="cashFlowBar" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Cap Rate</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" id="capRateBar" style="width: 68%"></div>
+                                </div>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Market Fit</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill" id="marketFitBar" style="width: 82%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="metrics-grid">
+                        <div class="metric-card positive">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23" />
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">Monthly Cash Flow</span>
+                                <span class="metric-value" id="monthlyCashFlow">$287</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <polyline points="12 6 12 12 16 14" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">Cap Rate</span>
+                                <span class="metric-value" id="capRate">5.8%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">Cash-on-Cash</span>
+                                <span class="metric-value" id="cashOnCash">9.2%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                    <polyline points="17 6 23 6 23 12" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">5-Year IRR</span>
+                                <span class="metric-value" id="irr">12.4%</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">DSCR</span>
+                                <span class="metric-value" id="dscr">1.31x</span>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                    <line x1="16" y1="2" x2="16" y2="6" />
+                                    <line x1="8" y1="2" x2="8" y2="6" />
+                                    <line x1="3" y1="10" x2="21" y2="10" />
+                                </svg>
+                            </div>
+                            <div class="metric-content">
+                                <span class="metric-label">Break-even Vacancy</span>
+                                <span class="metric-value" id="breakEven">14.2%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Summary -->
+                    <div class="summary-card">
+                        <h3 class="summary-title">Financial Summary</h3>
+                        <div class="summary-sections">
+                            <div class="summary-section">
+                                <h4>Monthly Income</h4>
+                                <div class="summary-row">
+                                    <span>Gross Rent</span>
+                                    <span id="grossRent">$2,200</span>
+                                </div>
+                                <div class="summary-row deduction">
+                                    <span>Less: Vacancy (<span id="vacancyPct">6</span>%)</span>
+                                    <span id="vacancyLoss">-$132</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Effective Gross Income</span>
+                                    <span id="effectiveIncome">$2,068</span>
+                                </div>
+                            </div>
+                            <div class="summary-section">
+                                <h4>Monthly Expenses</h4>
+                                <div class="summary-row">
+                                    <span>Mortgage (P&I)</span>
+                                    <span id="mortgagePayment">$1,169</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Property Tax</span>
+                                    <span id="monthlyTax">$232</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Insurance</span>
+                                    <span id="monthlyInsurance">$150</span>
+                                </div>
+                                <div class="summary-row" id="condoFeesRow" style="display: none;">
+                                    <span>Condo Fees</span>
+                                    <span id="monthlyCondoFees">$375</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Maintenance (<span id="maintenancePct">8</span>%)</span>
+                                    <span id="monthlyMaintenance">$176</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Property Management (<span id="pmPct">8</span>%)</span>
+                                    <span id="monthlyPM">$176</span>
+                                </div>
+                                <div class="summary-row" id="utilitiesRow" style="display: none;">
+                                    <span>Utilities</span>
+                                    <span id="monthlyUtilities">$350</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total Expenses</span>
+                                    <span id="totalExpenses">$1,903</span>
+                                </div>
+                            </div>
+                            <div class="summary-section highlight">
+                                <div class="summary-row net-income">
+                                    <span>Net Monthly Cash Flow</span>
+                                    <span id="netCashFlow">$287</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Annual Cash Flow</span>
+                                    <span id="annualCashFlow">$3,444</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Investment Summary -->
+                    <div class="investment-card">
+                        <h3 class="summary-title">Investment Summary</h3>
+                        <div class="investment-breakdown">
+                            <div class="investment-row">
+                                <span>Down Payment</span>
+                                <span id="investDownPayment">$90,000</span>
+                            </div>
+                            <div class="investment-row">
+                                <span>Closing Costs</span>
+                                <span id="investClosingCosts">$5,000</span>
+                            </div>
+                            <div class="investment-row total">
+                                <span>Total Cash Required</span>
+                                <span id="totalCashRequired">$95,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alberta Advantage Banner -->
+                    <div class="alberta-banner">
+                        <div class="alberta-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                        </div>
+                        <div class="alberta-content">
+                            <h4>Alberta Advantage</h4>
+                            <p>No rent control! You can increase rent annually after 365 days with 3 months notice. No
+                                provincial sales tax (PST) on services.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scenario Analysis Section -->
+    <section id="scenarios" class="scenarios-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Scenario Analysis</h2>
+                <p class="section-subtitle">Model different market conditions and see how they affect your returns</p>
+            </div>
+
+            <div class="scenarios-grid">
+                <!-- Interest Rate Sensitivity -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                            </svg>
+                        </div>
+                        <h3>Interest Rate Sensitivity</h3>
+                    </div>
+                    <p class="scenario-description">See how rate changes affect your cash flow</p>
+
+                    <div class="scenario-slider">
+                        <label>Interest Rate: <span id="rateSliderValue">5.5%</span></label>
+                        <input type="range" id="rateSlider" min="3" max="10" step="0.25" value="5.5">
+                        <div class="slider-labels">
+                            <span>3%</span>
+                            <span>10%</span>
+                        </div>
+                    </div>
+
+                    <div class="scenario-results" id="rateScenarioResults">
+                        <div class="scenario-result-row">
+                            <span>4.0% Rate</span>
+                            <span class="positive" id="rate4CashFlow">+$412/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>5.5% Rate (Current)</span>
+                            <span id="rate55CashFlow">-$876/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>7.0% Rate</span>
+                            <span class="negative" id="rate7CashFlow">-$1,156/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>Break-even Rate</span>
+                            <span class="highlight" id="breakEvenRate">3.2%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vacancy Stress Test -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </div>
+                        <h3>Vacancy Stress Test</h3>
+                    </div>
+                    <p class="scenario-description">Model different vacancy scenarios</p>
+
+                    <div class="scenario-slider">
+                        <label>Vacancy Rate: <span id="vacancySliderValue">6%</span></label>
+                        <input type="range" id="vacancySlider" min="0" max="20" step="1" value="6">
+                        <div class="slider-labels">
+                            <span>0%</span>
+                            <span>20%</span>
+                        </div>
+                    </div>
+
+                    <div class="scenario-results" id="vacancyScenarioResults">
+                        <div class="scenario-result-row">
+                            <span>0% Vacancy (Best)</span>
+                            <span class="positive" id="vacancy0">+$132/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>6% Vacancy (Current)</span>
+                            <span id="vacancy6">-$876/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>10% Vacancy</span>
+                            <span class="negative" id="vacancy10">-$1,008/mo</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>Max Tolerable</span>
+                            <span class="highlight" id="maxVacancy">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rent Growth Projection -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                        </div>
+                        <h3>Rent Growth Projection</h3>
+                    </div>
+                    <p class="scenario-description">Project future returns with rent increases</p>
+
+                    <div class="scenario-slider">
+                        <label>Annual Rent Growth: <span id="rentGrowthValue">3%</span></label>
+                        <input type="range" id="rentGrowthSlider" min="0" max="10" step="0.5" value="3">
+                        <div class="slider-labels">
+                            <span>0%</span>
+                            <span>10%</span>
+                        </div>
+                    </div>
+
+                    <div class="scenario-results" id="rentGrowthResults">
+                        <div class="scenario-result-row">
+                            <span>Year 1 Rent</span>
+                            <span id="year1Rent">$2,200</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>Year 3 Rent</span>
+                            <span id="year3Rent">$2,403</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>Year 5 Rent</span>
+                            <span class="positive" id="year5Rent">$2,550</span>
+                        </div>
+                        <div class="scenario-result-row">
+                            <span>Year to Cash Flow Positive</span>
+                            <span class="highlight" id="yearPositive">Year 3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5-Year Investment Timeline -->
+                <div class="scenario-card timeline-card">
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                            </svg>
+                        </div>
+                        <h3>5-Year Investment Timeline</h3>
+                    </div>
+                    <p class="scenario-description">Projected equity growth and cumulative cash flow</p>
+
+                    <div class="timeline-chart" id="timelineChart">
+                        <div class="timeline-bars">
+                            <div class="timeline-bar" data-year="1">
+                                <div class="bar-equity" id="equity1" style="height: 20%"></div>
+                                <div class="bar-cashflow" id="cf1" style="height: 5%"></div>
+                                <span class="bar-label">Y1</span>
+                            </div>
+                            <div class="timeline-bar" data-year="2">
+                                <div class="bar-equity" id="equity2" style="height: 35%"></div>
+                                <div class="bar-cashflow" id="cf2" style="height: 10%"></div>
+                                <span class="bar-label">Y2</span>
+                            </div>
+                            <div class="timeline-bar" data-year="3">
+                                <div class="bar-equity" id="equity3" style="height: 50%"></div>
+                                <div class="bar-cashflow" id="cf3" style="height: 18%"></div>
+                                <span class="bar-label">Y3</span>
+                            </div>
+                            <div class="timeline-bar" data-year="4">
+                                <div class="bar-equity" id="equity4" style="height: 68%"></div>
+                                <div class="bar-cashflow" id="cf4" style="height: 28%"></div>
+                                <span class="bar-label">Y4</span>
+                            </div>
+                            <div class="timeline-bar" data-year="5">
+                                <div class="bar-equity" id="equity5" style="height: 85%"></div>
+                                <div class="bar-cashflow" id="cf5" style="height: 40%"></div>
+                                <span class="bar-label">Y5</span>
+                            </div>
+                        </div>
+                        <div class="timeline-legend">
+                            <span class="legend-item"><span class="legend-color equity"></span> Equity</span>
+                            <span class="legend-item"><span class="legend-color cashflow"></span> Cum. Cash Flow</span>
+                        </div>
+                    </div>
+
+                    <div class="timeline-summary">
+                        <div class="timeline-stat">
+                            <span class="timeline-stat-value" id="totalEquity5Y">$127,450</span>
+                            <span class="timeline-stat-label">Total Equity (5Y)</span>
+                        </div>
+                        <div class="timeline-stat">
+                            <span class="timeline-stat-value" id="totalCashFlow5Y">-$8,256</span>
+                            <span class="timeline-stat-label">Cum. Cash Flow (5Y)</span>
+                        </div>
+                        <div class="timeline-stat">
+                            <span class="timeline-stat-value" id="totalReturn5Y">125%</span>
+                            <span class="timeline-stat-label">Total Return</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BRRRR Calculator Section -->
+    <section id="brrrr" class="brrrr-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">BRRRR Calculator</h2>
+                <p class="section-subtitle">Buy, Rehab, Rent, Refinance, Repeat — Calculate your all-in returns</p>
+            </div>
+
+            <div class="brrrr-grid">
+                <!-- BRRRR Inputs -->
+                <div class="brrrr-input-panel">
+                    <div class="brrrr-step">
+                        <div class="step-header">
+                            <span class="step-number">1</span>
+                            <h4>Buy</h4>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="brrrrPurchase">Purchase Price</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="brrrrPurchase" value="350,000" class="currency-input">
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label for="brrrrClosing">Closing Costs</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="brrrrClosing" value="5,000" class="currency-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brrrr-step">
+                        <div class="step-header">
+                            <span class="step-number">2</span>
+                            <h4>Rehab</h4>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="rehabCost">Renovation Budget</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="rehabCost" value="50,000" class="currency-input">
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label for="holdingCosts">Holding Costs (Monthly)</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="holdingCosts" value="1,500" class="currency-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-row single">
+                            <div class="input-field">
+                                <label for="rehabMonths">Rehab Duration</label>
+                                <div class="input-wrapper">
+                                    <select id="rehabMonths">
+                                        <option value="1">1 month</option>
+                                        <option value="2">2 months</option>
+                                        <option value="3" selected>3 months</option>
+                                        <option value="4">4 months</option>
+                                        <option value="6">6 months</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brrrr-step">
+                        <div class="step-header">
+                            <span class="step-number">3</span>
+                            <h4>Rent</h4>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="brrrrARV">After Repair Value (ARV)</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="brrrrARV" value="475,000" class="currency-input">
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label for="brrrrRent">Monthly Rent (Post-Rehab)</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="brrrrRent" value="2,800" class="currency-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="brrrr-step">
+                        <div class="step-header">
+                            <span class="step-number">4</span>
+                            <h4>Refinance</h4>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-field">
+                                <label for="refiLTV">Refinance LTV</label>
+                                <div class="input-wrapper percentage">
+                                    <input type="number" id="refiLTV" value="75" min="50" max="80">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                            <div class="input-field">
+                                <label for="refiRate">Refinance Rate</label>
+                                <div class="input-wrapper percentage">
+                                    <input type="number" id="refiRate" value="5.5" step="0.1" min="0" max="15">
+                                    <span class="input-suffix">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-row single">
+                            <div class="input-field">
+                                <label for="refiCosts">Refinance Costs</label>
+                                <div class="input-wrapper currency">
+                                    <span class="input-prefix">$</span>
+                                    <input type="text" id="refiCosts" value="3,000" class="currency-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="analyzeBRRRR" class="analyze-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                        </svg>
+                        Analyze BRRRR Deal
+                    </button>
+                </div>
+
+                <!-- BRRRR Results -->
+                <div class="brrrr-results-panel">
+                    <div class="brrrr-result-card highlight">
+                        <h4>Cash Left in Deal</h4>
+                        <div class="brrrr-big-number positive" id="cashLeftInDeal">$0</div>
+                        <p class="brrrr-subtext">After refinance — aim for $0 or less!</p>
+                    </div>
+
+                    <div class="brrrr-metrics">
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Total Investment</span>
+                            <span class="brrrr-metric-value" id="brrrrTotalInvestment">$409,500</span>
+                        </div>
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Refinance Amount</span>
+                            <span class="brrrr-metric-value" id="brrrrRefiAmount">$356,250</span>
+                        </div>
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Equity Created</span>
+                            <span class="brrrr-metric-value positive" id="brrrrEquityCreated">$118,750</span>
+                        </div>
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Monthly Cash Flow</span>
+                            <span class="brrrr-metric-value" id="brrrrMonthlyCF">$342</span>
+                        </div>
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Cash-on-Cash (Infinite?)</span>
+                            <span class="brrrr-metric-value highlight" id="brrrrCoC">∞%</span>
+                        </div>
+                        <div class="brrrr-metric">
+                            <span class="brrrr-metric-label">Rehab ROI</span>
+                            <span class="brrrr-metric-value positive" id="brrrrRehabROI">250%</span>
+                        </div>
+                    </div>
+
+                    <div class="brrrr-flowchart">
+                        <h4>Deal Flow</h4>
+                        <div class="flowchart">
+                            <div class="flow-step">
+                                <div class="flow-icon">🏠</div>
+                                <div class="flow-content">
+                                    <span class="flow-label">Purchase</span>
+                                    <span class="flow-value" id="flowPurchase">$350,000</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">🔨</div>
+                                <div class="flow-content">
+                                    <span class="flow-label">+ Rehab</span>
+                                    <span class="flow-value" id="flowRehab">$54,500</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">📈</div>
+                                <div class="flow-content">
+                                    <span class="flow-label">= ARV</span>
+                                    <span class="flow-value positive" id="flowARV">$475,000</span>
+                                </div>
+                            </div>
+                            <div class="flow-arrow">→</div>
+                            <div class="flow-step">
+                                <div class="flow-icon">🏦</div>
+                                <div class="flow-content">
+                                    <span class="flow-label">Refi @ 75%</span>
+                                    <span class="flow-value" id="flowRefi">$356,250</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Assistant Section -->
+    <section id="ai-assistant" class="ai-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="ai-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7 14a1 1 0 1 0 0 2 1 1 0 0 0 0-2m10 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
+                    </svg>
+                    AI-Powered (Coming Soon)
+                </div>
+                <h2 class="section-title">Intelligent Investment Assistant</h2>
+                <p class="section-subtitle">AI-powered insights and automation for smarter investing</p>
+            </div>
+
+            <div class="ai-features-grid">
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </div>
+                    <h4>Deal Finder</h4>
+                    <p>AI scans new MLS listings daily and alerts you when deals match your criteria.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q2 2025</div>
+                </div>
+
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                    </div>
+                    <h4>Rent Estimator</h4>
+                    <p>Get AI-predicted rent ranges based on property features, location, and market conditions.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q2 2025</div>
+                </div>
+
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                    <h4>Market Predictor</h4>
+                    <p>Forecast vacancy rates, rent trends, and property values using machine learning.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q3 2025</div>
+                </div>
+
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                            <line x1="12" y1="22.08" x2="12" y2="12" />
+                        </svg>
+                    </div>
+                    <h4>Renovation ROI</h4>
+                    <p>AI estimates value-add potential for different renovation scopes based on Calgary market.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q3 2025</div>
+                </div>
+
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                        </svg>
+                    </div>
+                    <h4>Auto-Underwriting</h4>
+                    <p>Generate complete investment reports with risk analysis and pro forma projections.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q4 2025</div>
+                </div>
+
+                <div class="ai-feature-card">
+                    <div class="ai-feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </div>
+                    <h4>AI Chat Assistant</h4>
+                    <p>Ask questions about Calgary real estate investing and get instant, informed answers.</p>
+                    <div class="ai-feature-status coming-soon">Coming Q4 2025</div>
+                </div>
+            </div>
+
+            <!-- Email Signup for AI Features -->
+            <div class="ai-signup">
+                <h3>Get Early Access</h3>
+                <p>Be the first to try our AI-powered features when they launch.</p>
+                <form class="signup-form" id="aiSignupForm">
+                    <input type="email" placeholder="Enter your email" class="signup-input" required>
+                    <button type="submit" class="signup-btn">Join Waitlist</button>
+                </form>
+                <p class="signup-note">Join 1,247 Calgary investors already on the waitlist</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Property Comparison Section -->
+    <section id="compare" class="compare-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Compare Properties</h2>
+                <p class="section-subtitle">Analyze multiple properties side-by-side</p>
+            </div>
+
+            <div class="compare-grid" id="compareGrid">
+                <div class="compare-property" id="property1">
+                    <div class="compare-header">
+                        <h4>Property A</h4>
+                        <button class="compare-load-btn" data-property="1">Load Current</button>
+                    </div>
+                    <div class="compare-stats" id="property1Stats">
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Purchase Price</span>
+                            <span class="compare-stat-value" id="compare1Price">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Monthly Rent</span>
+                            <span class="compare-stat-value" id="compare1Rent">—</span>
+                        </div>
+                        <div class="compare-stat highlight">
+                            <span class="compare-stat-label">Cash Flow</span>
+                            <span class="compare-stat-value" id="compare1CF">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Cap Rate</span>
+                            <span class="compare-stat-value" id="compare1Cap">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">CoC Return</span>
+                            <span class="compare-stat-value" id="compare1CoC">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Deal Score</span>
+                            <span class="compare-stat-value" id="compare1Score">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="compare-vs">VS</div>
+
+                <div class="compare-property" id="property2">
+                    <div class="compare-header">
+                        <h4>Property B</h4>
+                        <button class="compare-load-btn" data-property="2">Load Current</button>
+                    </div>
+                    <div class="compare-stats" id="property2Stats">
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Purchase Price</span>
+                            <span class="compare-stat-value" id="compare2Price">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Monthly Rent</span>
+                            <span class="compare-stat-value" id="compare2Rent">—</span>
+                        </div>
+                        <div class="compare-stat highlight">
+                            <span class="compare-stat-label">Cash Flow</span>
+                            <span class="compare-stat-value" id="compare2CF">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Cap Rate</span>
+                            <span class="compare-stat-value" id="compare2Cap">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">CoC Return</span>
+                            <span class="compare-stat-value" id="compare2CoC">—</span>
+                        </div>
+                        <div class="compare-stat">
+                            <span class="compare-stat-label">Deal Score</span>
+                            <span class="compare-stat-value" id="compare2Score">—</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="compare-winner" id="compareWinner" style="display: none;">
+                <h3>🏆 Recommended: <span id="winnerName">Property A</span></h3>
+                <p id="winnerReason">Higher cash flow and better cap rate make this the stronger investment.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Tracker Section -->
+    <section id="portfolio" class="portfolio-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Portfolio Tracker</h2>
+                <p class="section-subtitle">Track your investment portfolio and project long-term wealth</p>
+            </div>
+
+            <div class="portfolio-grid">
+                <!-- Saved Properties -->
+                <div class="portfolio-card saved-properties-card">
+                    <div class="portfolio-card-header">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                            </svg>
+                            Saved Properties
+                        </h3>
+                        <button id="savePropertyBtn" class="save-property-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19" />
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                            </svg>
+                            Save Current
+                        </button>
+                    </div>
+                    <div id="savedPropertiesList" class="saved-properties-list">
+                        <div class="empty-state">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+                            <p>No saved properties yet</p>
+                            <span>Click "Save Current" to add properties to your portfolio</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Portfolio Summary -->
+                <div class="portfolio-card summary-card">
+                    <div class="portfolio-card-header">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <line x1="18" y1="20" x2="18" y2="10" />
+                                <line x1="12" y1="20" x2="12" y2="4" />
+                                <line x1="6" y1="20" x2="6" y2="14" />
+                            </svg>
+                            Portfolio Summary
+                        </h3>
+                    </div>
+                    <div class="portfolio-stats">
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Total Properties</span>
+                            <span class="portfolio-stat-value" id="portfolioCount">0</span>
+                        </div>
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Total Value</span>
+                            <span class="portfolio-stat-value" id="portfolioValue">$0</span>
+                        </div>
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Total Equity</span>
+                            <span class="portfolio-stat-value" id="portfolioEquity">$0</span>
+                        </div>
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Monthly Cash Flow</span>
+                            <span class="portfolio-stat-value" id="portfolioCashFlow">$0</span>
+                        </div>
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Avg Cap Rate</span>
+                            <span class="portfolio-stat-value" id="portfolioCapRate">0%</span>
+                        </div>
+                        <div class="portfolio-stat">
+                            <span class="portfolio-stat-label">Annual Income</span>
+                            <span class="portfolio-stat-value" id="portfolioAnnualIncome">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wealth Projection -->
+                <div class="portfolio-card wealth-card">
+                    <div class="portfolio-card-header">
+                        <h3>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                                <polyline points="17 6 23 6 23 12" />
+                            </svg>
+                            Wealth Projection
+                        </h3>
+                    </div>
+                    <div class="wealth-controls">
+                        <div class="wealth-input">
+                            <label>Appreciation Rate</label>
+                            <input type="range" id="appreciationRate" min="0" max="10" value="3" step="0.5">
+                            <span id="appreciationValue">3%</span>
+                        </div>
+                        <div class="wealth-input">
+                            <label>Rent Growth</label>
+                            <input type="range" id="rentGrowthRate" min="0" max="10" value="3" step="0.5">
+                            <span id="rentGrowthValue">3%</span>
+                        </div>
+                    </div>
+                    <div class="wealth-projections">
+                        <div class="wealth-year">
+                            <span class="wealth-year-label">Year 10</span>
+                            <div class="wealth-details">
+                                <div class="wealth-detail">
+                                    <span>Equity</span>
+                                    <span id="equity10">$0</span>
+                                </div>
+                                <div class="wealth-detail">
+                                    <span>Cash Flow</span>
+                                    <span id="cashFlow10">$0/mo</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wealth-year">
+                            <span class="wealth-year-label">Year 20</span>
+                            <div class="wealth-details">
+                                <div class="wealth-detail">
+                                    <span>Equity</span>
+                                    <span id="equity20">$0</span>
+                                </div>
+                                <div class="wealth-detail">
+                                    <span>Cash Flow</span>
+                                    <span id="cashFlow20">$0/mo</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wealth-year highlight">
+                            <span class="wealth-year-label">Year 30</span>
+                            <div class="wealth-details">
+                                <div class="wealth-detail">
+                                    <span>Total Equity</span>
+                                    <span id="equity30" class="big-number">$0</span>
+                                </div>
+                                <div class="wealth-detail">
+                                    <span>Monthly Income</span>
+                                    <span id="cashFlow30" class="big-number">$0/mo</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Amortization Section -->
+    <section id="amortization-schedule" class="amortization-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Amortization Schedule</h2>
+                <p class="section-subtitle">See your mortgage paydown over time with principal vs interest breakdown</p>
+            </div>
+
+            <div class="amortization-content">
+                <!-- Amortization Chart -->
+                <div class="amortization-chart-container">
+                    <div class="chart-header">
+                        <h3>Principal vs Interest Over Time</h3>
+                        <div class="chart-legend">
+                            <span class="legend-item"><span class="legend-color principal"></span> Principal</span>
+                            <span class="legend-item"><span class="legend-color interest"></span> Interest</span>
+                            <span class="legend-item"><span class="legend-color balance"></span> Balance</span>
+                        </div>
+                    </div>
+                    <div class="amortization-chart" id="amortizationChart">
+                        <!-- Chart bars will be generated by JS -->
+                    </div>
+                    <div class="chart-axis">
+                        <span>Year 1</span>
+                        <span>Year 5</span>
+                        <span>Year 10</span>
+                        <span>Year 15</span>
+                        <span>Year 20</span>
+                        <span>Year 25</span>
+                    </div>
+                </div>
+
+                <!-- Amortization Stats -->
+                <div class="amortization-stats">
+                    <div class="amort-stat-card">
+                        <div class="amort-stat-icon">💰</div>
+                        <div class="amort-stat-content">
+                            <span class="amort-stat-label">Total Interest Paid</span>
+                            <span class="amort-stat-value" id="totalInterest">$0</span>
+                        </div>
+                    </div>
+                    <div class="amort-stat-card">
+                        <div class="amort-stat-icon">🏠</div>
+                        <div class="amort-stat-content">
+                            <span class="amort-stat-label">Total Principal</span>
+                            <span class="amort-stat-value" id="totalPrincipal">$0</span>
+                        </div>
+                    </div>
+                    <div class="amort-stat-card">
+                        <div class="amort-stat-icon">📈</div>
+                        <div class="amort-stat-content">
+                            <span class="amort-stat-label">Interest/Principal Ratio</span>
+                            <span class="amort-stat-value" id="interestRatio">0%</span>
+                        </div>
+                    </div>
+                    <div class="amort-stat-card">
+                        <div class="amort-stat-icon">🎯</div>
+                        <div class="amort-stat-content">
+                            <span class="amort-stat-label">Equity After 5 Years</span>
+                            <span class="amort-stat-value" id="equity5Years">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Amortization Table -->
+                <div class="amortization-table-container">
+                    <h3>Year-by-Year Breakdown</h3>
+                    <div class="amortization-table-wrapper">
+                        <table class="amortization-table" id="amortizationTable">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Starting Balance</th>
+                                    <th>Annual Payment</th>
+                                    <th>Principal Paid</th>
+                                    <th>Interest Paid</th>
+                                    <th>Ending Balance</th>
+                                    <th>Equity Built</th>
+                                </tr>
+                            </thead>
+                            <tbody id="amortizationBody">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tax Calculator Section -->
+    <section id="tax" class="tax-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Canadian Tax Calculator</h2>
+                <p class="section-subtitle">Estimate your rental income taxes with Alberta-specific rates and CCA
+                    depreciation</p>
+            </div>
+
+            <div class="tax-grid">
+                <!-- Tax Inputs -->
+                <div class="tax-card inputs-card">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" />
+                            <line x1="1" y1="10" x2="23" y2="10" />
+                        </svg>
+                        Your Tax Situation
+                    </h3>
+                    <div class="tax-inputs">
+                        <div class="tax-input-field">
+                            <label>Employment Income</label>
+                            <div class="input-wrapper currency">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="employmentIncome" value="100,000" class="currency-input">
+                            </div>
+                        </div>
+                        <div class="tax-input-field">
+                            <label>Marginal Tax Rate</label>
+                            <select id="marginalRate">
+                                <option value="0.25">25% (Under $55,867)</option>
+                                <option value="0.305">30.5% ($55,867 - $111,733)</option>
+                                <option value="0.36" selected>36% ($111,733 - $173,205)</option>
+                                <option value="0.42">42% ($173,205 - $246,752)</option>
+                                <option value="0.48">48% (Over $246,752)</option>
+                            </select>
+                        </div>
+                        <div class="tax-input-field">
+                            <label>Building Value (for CCA)</label>
+                            <div class="input-wrapper currency">
+                                <span class="input-prefix">$</span>
+                                <input type="text" id="buildingValue" value="280,000" class="currency-input">
+                            </div>
+                            <span class="input-hint">Typically 80% of purchase price (excl. land)</span>
+                        </div>
+                        <div class="tax-toggle-field">
+                            <label>Claim CCA Depreciation?</label>
+                            <div class="toggle-wrapper">
+                                <label class="toggle">
+                                    <input type="checkbox" id="claimCCA" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="toggle-label" id="ccaLabel">Yes (4% rate)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rental Income Summary -->
+                <div class="tax-card income-card">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                        Rental Income & Expenses
+                    </h3>
+                    <div class="tax-summary-rows">
+                        <div class="tax-row">
+                            <span>Gross Rental Income</span>
+                            <span id="taxGrossIncome">$30,000</span>
+                        </div>
+                        <div class="tax-row expense">
+                            <span>Mortgage Interest</span>
+                            <span id="taxMortgageInterest">-$12,000</span>
+                        </div>
+                        <div class="tax-row expense">
+                            <span>Property Tax</span>
+                            <span id="taxPropertyTax">-$2,163</span>
+                        </div>
+                        <div class="tax-row expense">
+                            <span>Insurance</span>
+                            <span id="taxInsurance">-$1,800</span>
+                        </div>
+                        <div class="tax-row expense">
+                            <span>Maintenance & Repairs</span>
+                            <span id="taxMaintenance">-$2,400</span>
+                        </div>
+                        <div class="tax-row expense">
+                            <span>Property Management</span>
+                            <span id="taxPM">-$2,400</span>
+                        </div>
+                        <div class="tax-row expense cca" id="ccaRow">
+                            <span>CCA Depreciation</span>
+                            <span id="taxCCA">-$11,200</span>
+                        </div>
+                        <div class="tax-row total">
+                            <span>Net Rental Income</span>
+                            <span id="taxNetIncome">-$1,963</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tax Impact -->
+                <div class="tax-card impact-card">
+                    <h3>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                        Tax Impact
+                    </h3>
+                    <div class="tax-impact-display">
+                        <div class="tax-impact-main" id="taxImpactDisplay">
+                            <span class="tax-impact-label">Tax Savings</span>
+                            <span class="tax-impact-value positive">$707</span>
+                            <span class="tax-impact-note">Rental loss offsets employment income</span>
+                        </div>
+                    </div>
+                    <div class="tax-comparison">
+                        <div class="comparison-item">
+                            <span>Without CCA</span>
+                            <span id="taxWithoutCCA">Tax: $3,326</span>
+                        </div>
+                        <div class="comparison-item highlight">
+                            <span>With CCA</span>
+                            <span id="taxWithCCA">Savings: $707</span>
+                        </div>
+                        <div class="comparison-item benefit">
+                            <span>CCA Benefit</span>
+                            <span id="ccaBenefit">$4,032/year</span>
+                        </div>
+                    </div>
+                    <div class="tax-warning">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <line x1="12" y1="8" x2="12" y2="12" />
+                            <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span>CCA reduces your adjusted cost base, increasing capital gains when you sell. Consult a tax
+                            professional.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Neighborhoods Section -->
+    <section id="neighborhoods" class="neighborhoods-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Calgary Neighborhoods</h2>
+                <p class="section-subtitle">Explore rental data across 200+ Calgary communities</p>
+            </div>
+            <div class="neighborhoods-grid" id="neighborhoodsGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Data Section -->
+    <section id="market" class="market-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Calgary Market Snapshot</h2>
+                <p class="section-subtitle">Real-time data to inform your investment decisions</p>
+            </div>
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-card-header">
+                        <h3>Vacancy Rate Trend</h3>
+                        <span class="trend-badge negative">↑ Rising</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value">6.0%</span>
+                        <span class="market-stat-label">Current (2025)</span>
+                    </div>
+                    <div class="market-chart" id="vacancyChart">
+                        <div class="chart-bar" style="height: 20%;" data-value="1.4%">
+                            <span class="chart-label">2023</span>
+                        </div>
+                        <div class="chart-bar" style="height: 60%;" data-value="4.6%">
+                            <span class="chart-label">2024</span>
+                        </div>
+                        <div class="chart-bar active" style="height: 80%;" data-value="6.0%">
+                            <span class="chart-label">2025</span>
+                        </div>
+                    </div>
+                    <p class="market-insight">⚠️ Vacancy rising due to record new supply (10,059 units in 2024). Factor
+                        in 6-8% vacancy for conservative analysis.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-card-header">
+                        <h3>Average Rent (1BR)</h3>
+                        <span class="trend-badge negative">↓ -6% YoY</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value">$1,522</span>
+                        <span class="market-stat-label">City-wide average</span>
+                    </div>
+                    <div class="rent-range">
+                        <div class="range-item">
+                            <span class="range-label">Low (NE Calgary)</span>
+                            <span class="range-value">$1,391</span>
+                        </div>
+                        <div class="range-item">
+                            <span class="range-label">High (East Village)</span>
+                            <span class="range-value">$2,079</span>
+                        </div>
+                    </div>
+                    <p class="market-insight">📉 Rents declining for first time since 2020. New supply creating
+                        tenant-friendly market.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-card-header">
+                        <h3>Property Tax Rate</h3>
+                        <span class="trend-badge neutral">2025 Rate</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value">0.618%</span>
+                        <span class="market-stat-label">Combined rate</span>
+                    </div>
+                    <div class="tax-breakdown">
+                        <div class="tax-item">
+                            <span class="tax-label">Municipal</span>
+                            <span class="tax-value">0.387%</span>
+                        </div>
+                        <div class="tax-item">
+                            <span class="tax-label">Education</span>
+                            <span class="tax-value">0.231%</span>
+                        </div>
+                    </div>
+                    <p class="market-insight">💡 Property taxes increased 8.9% in 2025. The calculator auto-applies the
+                        current rate.</p>
+                </div>
+                <div class="market-card">
+                    <div class="market-card-header">
+                        <h3>New Supply Pipeline</h3>
+                        <span class="trend-badge warning">⚠️ High</span>
+                    </div>
+                    <div class="market-stat">
+                        <span class="market-stat-value">29,670</span>
+                        <span class="market-stat-label">Units in pipeline</span>
+                    </div>
+                    <div class="supply-breakdown">
+                        <div class="supply-item">
+                            <div class="supply-bar" style="width: 75%;"></div>
+                            <span class="supply-label">Under Construction</span>
+                            <span class="supply-value">6,928</span>
+                        </div>
+                        <div class="supply-item">
+                            <div class="supply-bar" style="width: 100%;"></div>
+                            <span class="supply-label">In Development</span>
+                            <span class="supply-value">22,742</span>
+                        </div>
+                    </div>
+                    <p class="market-insight">🏗️ Record supply coming online. Condos/apartments most affected. Detached
+                        homes supply-constrained.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <rect width="32" height="32" rx="8" fill="url(#logo-gradient-footer)" />
+                                <path d="M8 20L16 10L24 20H8Z" fill="white" fill-opacity="0.9" />
+                                <rect x="14" y="18" width="4" height="6" fill="white" fill-opacity="0.7" />
+                                <defs>
+                                    <linearGradient id="logo-gradient-footer" x1="0" y1="0" x2="32" y2="32"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#6366F1" />
+                                        <stop offset="1" stop-color="#8B5CF6" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <span class="logo-text">Calgary<span class="logo-highlight">Analyzer</span></span>
+                    </div>
+                    <p class="footer-tagline">Investment property analysis built for Calgary.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Tools</h4>
+                        <a href="#calculator">Property Calculator</a>
+                        <a href="#neighborhoods">Neighborhood Data</a>
+                        <a href="#market">Market Insights</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="#">Investment Guide</a>
+                        <a href="#">Calgary REI Blog</a>
+                        <a href="#">Market Reports</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CalgaryAnalyzer. Data updated February 2025. For informational purposes only.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="map.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Initialize Top Neighborhoods in Legend -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Wait for CalgaryMap to initialize
+            setTimeout(function () {
+                if (window.CalgaryMap && window.CalgaryMap.getTopNeighborhoods) {
+                    const topHoods = window.CalgaryMap.getTopNeighborhoods(5);
+                    const container = document.getElementById('topNeighborhoods');
+                    if (container) {
+                        let html = '<h4>🏆 Top Investment Picks</h4>';
+                        topHoods.forEach((hood, index) => {
+                            html += `
+                                <div class="top-hood-item" onclick="CalgaryMap.select('${hood.id}')">
+                                    <span class="top-hood-rank">${index + 1}</span>
+                                    <span class="top-hood-name">${hood.name}</span>
+                                    <span class="top-hood-score">${hood.investmentScore}</span>
+                                </div>
+                            `;
+                        });
+                        container.innerHTML = html;
+                    }
+                }
+            }, 300);
+        });
+    </script>
+</body>
+
+
+</html>
